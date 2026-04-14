@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal Tie | Luxury Wedding Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #D4AF37; --cream: #FFFDF5; --dark-gold: #996515; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--cream); color: #333; }
+        h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; }
+        .card-shadow { box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.1); }
+        .active-tab { border-bottom: 2px solid var(--gold); color: var(--gold); }
+        
+        /* Smaller font for tables to fit more content gracefully */
+        table th { @apply px-3 py-3 text-[9px] uppercase tracking-wider text-gray-500 font-bold bg-gray-50/50; }
+        table td { @apply px-3 py-3 text-[11px] border-t border-gray-100 align-middle; }
+        
+        input, select, textarea { @apply bg-transparent border-b border-gray-200 py-2 outline-none focus:border-gold transition-all text-sm; }
+        textarea { @apply border rounded-lg p-3 bg-white/50 focus:bg-white; }
+        
+        /* Button styling for visibility */
+        .btn-primary { @apply bg-gold text-white px-6 py-2.5 rounded-lg hover:bg-dark-gold transition-all shadow-sm font-semibold text-xs uppercase tracking-widest active:scale-95; }
+        .btn-dark { @apply bg-black text-white px-6 py-2.5 rounded-lg hover:bg-gray-800 transition-all shadow-sm font-semibold text-xs uppercase tracking-widest active:scale-95; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <nav class="bg-white border-b border-gold/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold tracking-widest text-gold serif">ETERNAL TIE</span>
+                    <span class="text-[10px] uppercase tracking-widest text-gray-400">Wedding Organizer</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-wider">
+                    <button onclick="switchTab('dashboard')" class="nav-link" id="tab-dashboard">Dashboard</button>
+                    <button onclick="switchTab('budget')" class="nav-link" id="tab-budget">Budget</button>
+                    <button onclick="switchTab('guests')" class="nav-link" id="tab-guests">Guests</button>
+                    <button onclick="switchTab('vendors')" class="nav-link" id="tab-vendors">Vendors</button>
+                    <button onclick="switchTab('extra')" class="nav-link" id="tab-extra">Plan & Details</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- DASHBOARD -->
+        <section id="content-dashboard" class="tab-content">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-light mb-4 text-gray-800">Wedding Command Center</h1>
+                <p class="text-gray-500 italic">Tracking averages and allocations in real-time.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl card-shadow border border-gold/10 text-center">
+                    <h3 class="text-xl serif mb-4 text-gray-700 font-semibold uppercase tracking-tight">💰 Total Allocation</h3>
+                    <div class="w-full bg-gray-100 rounded-full h-2 mb-4">
+                        <div id="dash-budget-bar" class="bg-gold h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 italic">Remaining to limit: <span id="dash-budget-rem" class="font-bold text-gray-800">IDR 0</span></p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-shadow border border-gold/10 text-center">
+                    <h3 class="text-xl serif mb-4 text-gray-700 font-semibold uppercase tracking-tight">✉️ Guests</h3>
+                    <p class="text-5xl font-light text-gold" id="dash-guest-total">0</p>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-2">Total Contacts</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl card-shadow border border-gold/10 text-center">
+                    <h3 class="text-xl serif mb-4 text-gray-700 font-semibold uppercase tracking-tight">🤝 Vendors</h3>
+                    <p class="text-5xl font-light text-gold" id="dash-vendor-count">0</p>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-2">Total Leads</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BUDGET -->
+        <section id="content-budget" class="tab-content hidden">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-4xl serif text-gray-800">Budget Tracker</h2>
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest">Averaged from vendor leads</p>
+                </div>
+                <div class="text-right">
+                    <label class="text-[10px] uppercase text-gray-400 block mb-1">Total Limit</label>
+                    <input type="number" id="total-limit-input" value="250000000" onchange="updateBudgetLimits()" class="text-2xl font-bold text-gold bg-transparent border-b border-gold text-right outline-none w-64">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="budget-list"></div>
+        </section>
+
+        <!-- GUESTS -->
+        <section id="content-guests" class="tab-content hidden">
+            <h2 class="text-4xl serif text-gray-800 mb-8">Guest List</h2>
+            
+            <div class="bg-white p-8 rounded-2xl card-shadow border border-gold/10 mb-8">
+                <div class="flex flex-wrap gap-6 items-end">
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Full Name</label>
+                        <input type="text" id="g-name" placeholder="John Doe" class="w-full">
+                    </div>
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Relation</label>
+                        <input type="text" id="g-relation" placeholder="Cousin / Friend" class="w-full">
+                    </div>
+                    <div class="w-full md:w-32">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Guest Of</label>
+                        <select id="g-side" class="w-full">
+                            <option value="Bride">Bride</option>
+                            <option value="Groom">Groom</option>
+                            <option value="Joint">Joint</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Location</label>
+                        <input type="text" id="g-location" placeholder="Jakarta" class="w-full">
+                    </div>
+                    <button onclick="saveGuest()" class="btn-primary">Add Guest</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl card-shadow overflow-hidden border border-gray-100">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">Name</th>
+                            <th class="w-1/4">Relation</th>
+                            <th class="w-1/6">Guest Of</th>
+                            <th class="w-1/4">Location</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guest-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VENDORS -->
+        <section id="content-vendors" class="tab-content hidden">
+            <h2 class="text-4xl serif text-gray-800 mb-8">Vendor Leads</h2>
+            
+            <div class="bg-white p-8 rounded-2xl card-shadow border border-gold/10 mb-12">
+                <div class="flex flex-wrap gap-6 items-end">
+                    <div class="w-full md:w-64">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Category</label>
+                        <select id="v-category" class="w-full">
+                            <option>Venue & Catering</option>
+                            <option>Attire: Bride</option>
+                            <option>Attire: Groom</option>
+                            <option>Attire: Family</option>
+                            <option>Documentation: Photographer</option>
+                            <option>Documentation: Videographer</option>
+                            <option>Documentation: Immediate Shoot</option>
+                            <option>Documentation: Candid Shot</option>
+                            <option>Documentation: Content Creator</option>
+                            <option>Decor Venue</option>
+                            <option>Entertainment</option>
+                            <option>MC</option>
+                            <option>Wedding Organizer</option>
+                            <option>Makeup and Hairdo</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Vendor Name</label>
+                        <input type="text" id="v-name" placeholder="Ex: JW Marriott" class="w-full">
+                    </div>
+                    <div class="w-full md:w-48">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Fee (IDR)</label>
+                        <input type="number" id="v-price" placeholder="80000000" class="w-full">
+                    </div>
+                    <button onclick="saveVendor()" class="btn-primary">Add Lead</button>
+                </div>
+            </div>
+
+            <div id="vendor-tables-container" class="space-y-12"></div>
+        </section>
+
+        <!-- PLAN & DETAILS -->
+        <section id="content-extra" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Wedding Flow -->
+                <div>
+                    <h2 class="text-4xl serif text-gray-800 mb-6">Wedding Flow</h2>
+                    
+                    <div class="bg-white p-6 rounded-2xl card-shadow border border-gold/10 mb-6">
+                        <p class="text-[10px] uppercase text-gray-400 mb-4 tracking-widest font-bold">Add Single Activity</p>
+                        <div class="flex gap-4 items-end">
+                            <div class="w-24">
+                                <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Time</label>
+                                <input type="text" id="flow-time" placeholder="08:00" class="w-full">
+                            </div>
+                            <div class="flex-1">
+                                <label class="text-[10px] uppercase text-gray-400 block mb-1 font-bold">Activity</label>
+                                <input type="text" id="flow-activity" placeholder="Holy Matrimony" class="w-full">
+                            </div>
+                            <button onclick="addFlowItem()" class="btn-primary text-lg">+</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl card-shadow border border-gold/10 mb-8">
+                        <p class="text-[10px] uppercase text-gray-400 mb-2 tracking-widest font-bold text-center">Bulk Flow Editor</p>
+                        <p class="text-[9px] text-gray-400 mb-4 italic text-center">Format: 08:00 - Makeup Ceremony</p>
+                        <textarea id="flow-bulk" placeholder="08:00 - Makeup&#10;10:00 - Holy Matrimony" class="w-full h-32 mb-4 text-xs italic"></textarea>
+                        <button onclick="parseBulkFlow()" class="btn-dark w-full">Save & Load Timeline</button>
+                    </div>
+
+                    <div id="flow-list" class="space-y-3"></div>
+                </div>
+
+                <!-- Speech & Music -->
+                <div class="space-y-12">
+                    <div>
+                        <h2 class="text-4xl serif text-gray-800 mb-6">Wedding Speech</h2>
+                        <div class="bg-white p-6 rounded-2xl card-shadow border border-gold/10">
+                            <label class="text-[10px] uppercase text-gray-400 block mb-2 tracking-widest font-bold">Speech Draft</label>
+                            <textarea id="speech-draft" oninput="saveSpeech()" placeholder="Freely write your heart out here..." class="w-full h-80 text-sm leading-relaxed outline-none border-none bg-transparent" style="border-bottom: none;"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="text-4xl serif text-gray-800 mb-6">Music Playlist</h2>
+                        <div class="bg-white p-6 rounded-2xl card-shadow border border-gold/10">
+                            <label class="text-[10px] uppercase text-gray-400 block mb-4 tracking-widest font-bold">Add Song Lead</label>
+                            <div class="flex gap-4 items-end mb-6">
+                                <input type="text" id="music-input" placeholder="Title & Artist" class="flex-1 text-sm">
+                                <button onclick="addMusic()" class="btn-primary">+</button>
+                            </div>
+                            <ul id="music-list" class="space-y-2 border-t pt-4"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const CATEGORIES = [
+            "Venue & Catering", "Attire: Bride", "Attire: Groom", "Attire: Family", 
+            "Documentation: Photographer", "Documentation: Videographer", "Documentation: Immediate Shoot", 
+            "Documentation: Candid Shot", "Documentation: Content Creator", 
+            "Decor Venue", "Entertainment", "MC", "Wedding Organizer", "Makeup and Hairdo"
+        ];
+        
+        let appData = { 
+            totalBudget: 250000000, 
+            guests: [], 
+            vendors: [], 
+            flow: [], 
+            music: [], 
+            speech: "" 
+        };
+
+        function switchTab(t) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active-tab'));
+            document.getElementById('content-'+t).classList.remove('hidden');
+            document.getElementById('tab-'+t).classList.add('active-tab');
+        }
+
+        function fmt(n) { return "IDR " + new Intl.NumberFormat('id-ID').format(n); }
+
+        function renderAll() {
+            const averages = {};
+            CATEGORIES.forEach(cat => {
+                const leads = appData.vendors.filter(v => v.category === cat);
+                if (leads.length > 0) {
+                    const total = leads.reduce((acc, v) => acc + parseFloat(v.price || 0), 0);
+                    averages[cat] = Math.round(total / leads.length);
+                } else {
+                    averages[cat] = 0;
+                }
+            });
+
+            const totalAllocated = Object.values(averages).reduce((acc, val) => acc + val, 0);
+            
+            // Dashboard UI
+            const pct = (totalAllocated / appData.totalBudget) * 100;
+            document.getElementById('dash-budget-bar').style.width = Math.min(100, pct) + "%";
+            document.getElementById('dash-budget-rem').innerText = fmt(appData.totalBudget - totalAllocated);
+            document.getElementById('dash-guest-total').innerText = appData.guests.length;
+            document.getElementById('dash-vendor-count').innerText = appData.vendors.length;
+
+            // Budget Tab
+            const bList = document.getElementById('budget-list');
+            bList.innerHTML = "";
+            Object.keys(averages).forEach(cat => {
+                bList.insertAdjacentHTML('beforeend', `
+                    <div class="bg-white p-5 rounded-xl border border-gold/10 card-shadow flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700">${cat}</span>
+                        <div class="text-right">
+                            <span class="text-[9px] uppercase text-gray-400 block">Avg Allocated</span>
+                            <span class="font-bold text-gold text-sm">${fmt(averages[cat])}</span>
+                        </div>
+                    </div>
+                `);
+            });
+
+            // Guest List Tab
+            const gBody = document.getElementById('guest-table-body');
+            gBody.innerHTML = "";
+            appData.guests.forEach((g, i) => {
+                gBody.insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-cream/50 transition-colors">
+                        <td class="font-semibold text-gray-800">${g.name}</td>
+                        <td class="text-gray-500 italic">${g.relation || '-'}</td>
+                        <td><span class="text-[9px] font-bold uppercase ${g.side === 'Bride' ? 'text-pink-500' : g.side === 'Groom' ? 'text-blue-500' : 'text-gold'}">${g.side || 'Bride'}</span></td>
+                        <td class="text-gray-400">${g.location || '-'}</td>
+                        <td class="text-right"><button onclick="delGuest(${i})" class="text-red-300 hover:text-red-500 font-bold transition-all px-2 uppercase text-[9px]">Remove</button></td>
+                    </tr>
+                `);
+            });
+
+            // Vendor Tab
+            const vCont = document.getElementById('vendor-tables-container');
+            vCont.innerHTML = "";
+            CATEGORIES.forEach(cat => {
+                const catVs = appData.vendors.filter(v => v.category === cat);
+                let html = `
+                    <div class="bg-white rounded-2xl card-shadow overflow-hidden border border-gold/10">
+                        <div class="bg-gray-50 px-6 py-3 flex justify-between items-center border-b border-gold/10">
+                            <h3 class="text-base serif text-gold font-bold uppercase tracking-wide">${cat}</h3>
+                            <span class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">${catVs.length} Leads</span>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead><tr><th>Vendor Name</th><th>Fee (IDR)</th><th class="text-right">Action</th></tr></thead>
+                            <tbody>
+                `;
+                if(catVs.length === 0) {
+                    html += `<tr><td colspan="3" class="text-center py-6 text-gray-300 italic text-[10px]">No leads entered for this category.</td></tr>`;
+                } else {
+                    catVs.forEach(v => {
+                        const originalIdx = appData.vendors.indexOf(v);
+                        html += `
+                            <tr class="hover:bg-cream/30">
+                                <td class="font-semibold text-gray-700">${v.name}</td>
+                                <td class="font-mono text-gray-500">${fmt(v.price)}</td>
+                                <td class="text-right"><button onclick="delVendor(${originalIdx})" class="text-red-300 hover:text-red-500 font-bold px-2 uppercase text-[9px]">Delete</button></td>
+                            </tr>
+                        `;
+                    });
+                }
+                html += `</tbody></table></div>`;
+                vCont.insertAdjacentHTML('beforeend', html);
+            });
+
+            // Timeline Display
+            const fList = document.getElementById('flow-list');
+            fList.innerHTML = appData.flow.sort((a,b) => a.time.localeCompare(b.time)).map((f, i) => `
+                <div class="flex items-center gap-4 bg-white p-3 rounded-lg card-shadow border border-gold/5 group">
+                    <b class="text-gold font-mono w-16 text-sm">${f.time}</b>
+                    <span class="flex-1 text-sm font-medium text-gray-700">${f.activity}</span>
+                    <button onclick="delFlow(${i})" class="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">×</button>
+                </div>
+            `).join('');
+
+            // Music List
+            const mList = document.getElementById('music-list');
+            mList.innerHTML = appData.music.map((m, i) => `
+                <li class="flex justify-between items-center text-[11px] p-2 bg-gray-50 rounded group">
+                    <span>${m}</span>
+                    <button onclick="delMusic(${i})" class="text-red-300 opacity-0 group-hover:opacity-100 transition-opacity">×</button>
+                </li>
+            `).join('');
+
+            // Speech
+            document.getElementById('speech-draft').value = appData.speech || "";
+        }
+
+        function saveGuest() {
+            const name = document.getElementById('g-name').value;
+            const rel = document.getElementById('g-relation').value;
+            const side = document.getElementById('g-side').value;
+            const loc = document.getElementById('g-location').value;
+            if(!name) {
+                alert("Please enter a guest name.");
+                return;
+            }
+            appData.guests.push({ name, relation: rel, side, location: loc });
+            document.getElementById('g-name').value = "";
+            document.getElementById('g-relation').value = "";
+            document.getElementById('g-location').value = "";
+            save();
+        }
+        function delGuest(i) { 
+            if(confirm("Remove this guest?")) {
+                appData.guests.splice(i, 1); 
+                save(); 
+            }
+        }
+
+        function saveVendor() {
+            const cat = document.getElementById('v-category').value;
+            const name = document.getElementById('v-name').value;
+            const price = document.getElementById('v-price').value;
+            if(!name || !price) {
+                alert("Please enter both vendor name and fee.");
+                return;
+            }
+            appData.vendors.push({ category: cat, name, price });
+            document.getElementById('v-name').value = "";
+            document.getElementById('v-price').value = "";
+            save();
+        }
+        function delVendor(i) { 
+            if(confirm("Delete this vendor lead?")) {
+                appData.vendors.splice(i, 1); 
+                save(); 
+            }
+        }
+
+        function addFlowItem() {
+            const time = document.getElementById('flow-time').value;
+            const activity = document.getElementById('flow-activity').value;
+            if(!time || !activity) return;
+            appData.flow.push({ time, activity });
+            document.getElementById('flow-time').value = "";
+            document.getElementById('flow-activity').value = "";
+            save();
+        }
+        function delFlow(i) { appData.flow.splice(i, 1); save(); }
+
+        function parseBulkFlow() {
+            const bulk = document.getElementById('flow-bulk').value;
+            if (!bulk) return;
+            const lines = bulk.split('\n');
+            const newItems = [];
+            lines.forEach(line => {
+                const match = line.match(/^(\d{1,2}:\d{2})\s*[-:]?\s*(.*)$/);
+                if (match) {
+                    newItems.push({ time: match[1], activity: match[2].trim() });
+                }
+            });
+            if (newItems.length > 0) {
+                appData.flow = newItems;
+                save();
+            }
+        }
+
+        function saveSpeech() {
+            appData.speech = document.getElementById('speech-draft').value;
+            localStorage.setItem('eternal_tie_v5', JSON.stringify(appData));
+        }
+        function addMusic() {
+            const val = document.getElementById('music-input').value;
+            if(!val) return;
+            appData.music.push(val);
+            document.getElementById('music-input').value = "";
+            save();
+        }
+        function delMusic(i) { appData.music.splice(i, 1); save(); }
+
+        function updateBudgetLimits() {
+            appData.totalBudget = parseFloat(document.getElementById('total-limit-input').value) || 250000000;
+            save();
+        }
+
+        function save() { 
+            localStorage.setItem('eternal_tie_v5', JSON.stringify(appData)); 
+            renderAll(); 
+        }
+
+        window.onload = () => { 
+            const s = localStorage.getItem('eternal_tie_v5'); 
+            if(s) {
+                try { appData = JSON.parse(s); } catch(e) { console.error("Data error"); }
+            }
+            renderAll(); 
+            switchTab('dashboard');
+        };
+    </script>
+</body>
+</html>
