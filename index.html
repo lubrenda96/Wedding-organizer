@@ -12,6 +12,7 @@
             --cream: #FAF9F6; 
             --dark-gold: #947438;
             --soft-black: #1A1A1A;
+            --deep-gray: #2D2D2D;
         }
         body { 
             font-family: 'Montserrat', sans-serif; 
@@ -23,7 +24,7 @@
             font-family: 'Cormorant Garamond', serif; 
         }
         .card-shadow { 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
         }
         .nav-link {
             position: relative;
@@ -42,20 +43,18 @@
             background: var(--gold);
         }
         
-        /* Table Styles */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
         table th { 
-            @apply px-4 py-4 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-light border-b border-gray-100;
+            @apply px-4 py-4 text-[9px] uppercase tracking-[0.2em] text-gray-500 font-bold border-b border-gray-100;
         }
         table td { 
-            @apply px-4 py-4 text-[11px] border-b border-gray-50 align-middle font-light; 
+            @apply px-4 py-4 text-[10px] border-b border-gray-50 align-middle font-normal text-gray-700; 
         }
         
-        /* Mobile Overlay Menu */
         #mobile-nav-overlay {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
@@ -68,23 +67,21 @@
             transform: translateY(0);
         }
 
-        /* Hero Image Container */
         .hero-gradient {
-            background: linear-gradient(to bottom, rgba(250, 249, 246, 0.1) 0%, rgba(250, 249, 246, 1) 100%);
+            background: linear-gradient(to bottom, rgba(250, 249, 246, 0) 0%, rgba(250, 249, 246, 0.8) 70%, rgba(250, 249, 246, 1) 100%);
         }
 
         input, select, textarea { 
             @apply bg-transparent border-b border-gray-200 py-3 outline-none focus:border-gold transition-all text-sm font-light; 
         }
         .btn-primary { 
-            @apply bg-gold text-white px-8 py-3 rounded-sm hover:bg-dark-gold transition-all font-light text-[10px] uppercase tracking-[0.2em] active:scale-95; 
+            @apply bg-gold text-white px-8 py-3 rounded-sm hover:bg-dark-gold transition-all font-medium text-[10px] uppercase tracking-[0.2em] active:scale-95 shadow-sm; 
         }
     </style>
 </head>
 <body class="min-h-screen pb-12">
 
-    <!-- Navigation -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-[100] border-b border-gray-50">
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-[100] border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-center h-24">
                 <div class="flex flex-col">
@@ -92,7 +89,6 @@
                     <span class="text-[9px] uppercase tracking-[0.25em] text-gold mt-1">Wedding Planning Journey</span>
                 </div>
                 
-                <!-- Desktop Menu -->
                 <div class="hidden lg:flex space-x-10 text-[10px] uppercase tracking-[0.2em] font-medium">
                     <button onclick="switchTab('dashboard')" class="nav-link" id="tab-dashboard">Dashboard</button>
                     <button onclick="switchTab('budget')" class="nav-link" id="tab-budget">Budget</button>
@@ -101,20 +97,18 @@
                     <button onclick="switchTab('extra')" class="nav-link" id="tab-extra">Plan & Details</button>
                 </div>
 
-                <!-- Mobile Menu Button -->
-                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-400 p-2 focus:outline-none">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-500 p-2">
                     <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4 8h16M4 16h16"></path></svg>
                 </button>
             </div>
         </div>
         
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-nav-overlay" class="lg:hidden fixed inset-x-0 top-24 bg-white border-b border-gray-100 py-8 px-6 space-y-6 flex flex-col text-center shadow-xl">
-            <button onclick="switchTab('dashboard')" class="text-[11px] uppercase tracking-[0.3em] text-gray-600">Dashboard</button>
-            <button onclick="switchTab('budget')" class="text-[11px] uppercase tracking-[0.3em] text-gray-600">Budget</button>
-            <button onclick="switchTab('guests')" class="text-[11px] uppercase tracking-[0.3em] text-gray-600">Guests</button>
-            <button onclick="switchTab('vendors')" class="text-[11px] uppercase tracking-[0.3em] text-gray-600">Vendors</button>
-            <button onclick="switchTab('extra')" class="text-[11px] uppercase tracking-[0.3em] text-gray-600">Plan & Details</button>
+        <div id="mobile-nav-overlay" class="lg:hidden fixed inset-x-0 top-24 bg-white border-b border-gray-100 py-10 px-6 space-y-8 flex flex-col text-center shadow-2xl">
+            <button onclick="switchTab('dashboard')" class="text-[12px] uppercase tracking-[0.3em] text-gray-800 font-medium">Dashboard</button>
+            <button onclick="switchTab('budget')" class="text-[12px] uppercase tracking-[0.3em] text-gray-800 font-medium">Budget</button>
+            <button onclick="switchTab('guests')" class="text-[12px] uppercase tracking-[0.3em] text-gray-800 font-medium">Guests</button>
+            <button onclick="switchTab('vendors')" class="text-[12px] uppercase tracking-[0.3em] text-gray-800 font-medium">Vendors</button>
+            <button onclick="switchTab('extra')" class="text-[12px] uppercase tracking-[0.3em] text-gray-800 font-medium">Plan & Details</button>
         </div>
     </nav>
 
@@ -122,35 +116,32 @@
         
         <!-- DASHBOARD -->
         <section id="content-dashboard" class="tab-content">
-            <!-- Hero Header with Image -->
-            <div class="relative w-full h-[60vh] md:h-[70vh] rounded-2xl overflow-hidden mt-6 shadow-2xl">
-                <img src="couple.jpg" id="couple-photo" class="w-full h-full object-cover grayscale opacity-90 transition-opacity duration-1000" alt="Our Journey">
-                <!-- Overlay -->
-                <div class="absolute inset-0 bg-black/20 hero-gradient flex flex-col items-center justify-end pb-16 px-6 text-center">
-                    <h1 class="text-3xl md:text-5xl font-light text-gray-900 serif mb-4 italic tracking-wide">Our Wedding Vision</h1>
-                    <p class="text-[10px] md:text-xs uppercase tracking-[0.4em] text-gray-600 font-light">Finalizing 16 years together, beginning our forever</p>
+            <div class="relative w-full h-[55vh] md:h-[65vh] rounded-2xl overflow-hidden mt-6 shadow-xl">
+                <img src="couple.jpg" id="couple-photo" class="w-full h-full object-cover grayscale opacity-90" alt="Brendaniel">
+                <div class="absolute inset-0 hero-gradient flex flex-col items-center justify-end pb-12 px-6 text-center">
+                    <h1 class="text-3xl md:text-4xl font-light text-gray-900 serif mb-3 italic tracking-wide">Our Wedding Vision</h1>
+                    <p class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-gray-700 font-normal">Finalizing 16 years together, beginning our forever</p>
                 </div>
             </div>
 
-            <!-- Dashboard Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 px-2">
                 <div class="bg-white p-10 rounded-xl card-shadow text-center border border-gray-50">
-                    <h3 class="text-xl serif mb-6 text-gray-800 italic tracking-widest font-semibold">Financial Overview</h3>
-                    <div class="w-full bg-gray-50 rounded-full h-[2px] mb-4">
+                    <h3 class="text-lg md:text-xl serif mb-6 text-deep-gray italic tracking-widest font-semibold">Financial Overview</h3>
+                    <div class="w-full bg-gray-100 rounded-full h-[2px] mb-4">
                         <div id="dash-budget-bar" class="bg-gold h-[2px] rounded-full transition-all duration-700" style="width: 0%"></div>
                     </div>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400">Remaining to limit</p>
-                    <p class="text-lg font-light text-gray-800 mt-1" id="dash-budget-rem">IDR 0</p>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500">Remaining to limit</p>
+                    <p class="text-base font-medium text-gray-800 mt-1" id="dash-budget-rem">IDR 0</p>
                 </div>
                 <div class="bg-white p-10 rounded-xl card-shadow text-center border border-gray-50">
-                    <h3 class="text-xl serif mb-6 text-gray-800 italic tracking-widest font-semibold">Our Guests</h3>
+                    <h3 class="text-lg md:text-xl serif mb-6 text-deep-gray italic tracking-widest font-semibold">Our Guests</h3>
                     <p class="text-6xl font-extralight text-gold serif italic" id="dash-guest-total">0</p>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-4">Hearts Joining Us</p>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mt-4">Hearts Joining Us</p>
                 </div>
                 <div class="bg-white p-10 rounded-xl card-shadow text-center border border-gray-50">
-                    <h3 class="text-xl serif mb-6 text-gray-800 italic tracking-widest font-semibold">Partnerships</h3>
+                    <h3 class="text-lg md:text-xl serif mb-6 text-deep-gray italic tracking-widest font-semibold">Partnerships</h3>
                     <p class="text-6xl font-extralight text-gold serif italic" id="dash-vendor-count">0</p>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mt-4">Lead Collaborators</p>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mt-4">Lead Collaborators</p>
                 </div>
             </div>
         </section>
@@ -163,11 +154,11 @@
                     <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mt-2">Averaged allocations from lead data</p>
                 </div>
                 <div class="text-right w-full md:w-auto">
-                    <label class="text-[9px] uppercase text-gray-300 block mb-2 tracking-widest">Maximum Investment</label>
+                    <label class="text-[9px] uppercase text-gray-400 block mb-2 tracking-widest font-bold">Total Budget Limit</label>
                     <input type="number" id="total-limit-input" value="250000000" onchange="updateBudgetLimits()" class="text-2xl font-light text-gold bg-transparent border-b border-gray-100 text-right outline-none w-full md:w-64">
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="budget-list"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="budget-list"></div>
         </section>
 
         <!-- GUESTS SECTION -->
@@ -177,15 +168,15 @@
             <div class="bg-white p-8 md:p-12 rounded-xl card-shadow border border-gray-50 mb-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-end">
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Full Name</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Full Name</label>
                         <input type="text" id="g-name" placeholder="Name" class="w-full">
                     </div>
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Relation</label>
-                        <input type="text" id="g-relation" placeholder="Cousin / Friend" class="w-full">
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Relation</label>
+                        <input type="text" id="g-relation" placeholder="Relation" class="w-full">
                     </div>
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Guest Of</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Guest Of</label>
                         <select id="g-side" class="w-full">
                             <option value="Bride">Bride</option>
                             <option value="Groom">Groom</option>
@@ -193,7 +184,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Location</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Location</label>
                         <input type="text" id="g-location" placeholder="City" class="w-full">
                     </div>
                     <button onclick="saveGuest()" class="btn-primary">Add Guest</button>
@@ -201,7 +192,7 @@
             </div>
 
             <div class="bg-white rounded-xl card-shadow border border-gray-50 table-responsive">
-                <table class="w-full text-left min-w-[800px]">
+                <table class="w-full text-left min-w-[700px]">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -223,7 +214,7 @@
             <div class="bg-white p-8 md:p-12 rounded-xl card-shadow border border-gray-50 mb-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-end">
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Category</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Category</label>
                         <select id="v-category" class="w-full">
                             <option>Venue & Catering</option>
                             <option>Attire: Bride</option>
@@ -242,51 +233,45 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Vendor Name</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Vendor Name</label>
                         <input type="text" id="v-name" placeholder="Vendor" class="w-full">
                     </div>
                     <div>
-                        <label class="text-[9px] uppercase text-gray-400 block mb-2 font-medium tracking-widest">Fee (IDR)</label>
+                        <label class="text-[9px] uppercase text-gray-500 block mb-2 font-bold tracking-widest">Fee (IDR)</label>
                         <input type="number" id="v-price" placeholder="Fee" class="w-full">
                     </div>
                     <button onclick="saveVendor()" class="btn-primary">Add Lead</button>
                 </div>
             </div>
 
-            <div id="vendor-tables-container" class="space-y-20"></div>
+            <div id="vendor-tables-container" class="space-y-16"></div>
         </section>
 
         <!-- PLAN & DETAILS SECTION -->
         <section id="content-extra" class="tab-content hidden pt-12">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <!-- Timeline -->
                 <div>
-                    <h2 class="text-5xl serif text-gray-800 font-light italic mb-12">Wedding Itinerary</h2>
-                    
+                    <h2 class="text-5xl serif text-gray-800 font-light italic mb-12">Wedding Flow</h2>
                     <div class="bg-white p-8 rounded-xl card-shadow border border-gray-50 mb-8">
                         <div class="flex gap-6 items-end">
                             <div class="w-24">
-                                <label class="text-[9px] uppercase text-gray-400 block mb-2 tracking-widest">Time</label>
+                                <label class="text-[9px] uppercase text-gray-400 block mb-2 tracking-widest font-bold">Time</label>
                                 <input type="text" id="flow-time" placeholder="08:00" class="w-full">
                             </div>
                             <div class="flex-1">
-                                <label class="text-[9px] uppercase text-gray-400 block mb-2 tracking-widest">Activity</label>
+                                <label class="text-[9px] uppercase text-gray-400 block mb-2 tracking-widest font-bold">Activity</label>
                                 <input type="text" id="flow-activity" placeholder="Activity" class="w-full">
                             </div>
                             <button onclick="addFlowItem()" class="btn-primary">+</button>
                         </div>
                     </div>
-
                     <div class="bg-white p-8 rounded-xl card-shadow border border-gold/5 mb-12">
-                        <label class="text-[10px] uppercase text-gray-400 block mb-4 tracking-widest text-center">Batch Timeline Entry</label>
-                        <textarea id="flow-bulk" placeholder="08:00 - Makeup&#10;10:00 - Ceremony" class="w-full h-32 mb-6 text-xs italic tracking-wide leading-relaxed"></textarea>
+                        <textarea id="flow-bulk" placeholder="08:00 - Makeup" class="w-full h-32 mb-6 text-xs italic tracking-wide leading-relaxed"></textarea>
                         <button onclick="parseBulkFlow()" class="w-full bg-gray-900 text-white py-4 rounded-sm text-[10px] uppercase tracking-[0.3em] hover:bg-black transition-all">Save Timeline</button>
                     </div>
-
                     <div id="flow-list" class="space-y-4 border-l border-gray-100 ml-4"></div>
                 </div>
 
-                <!-- Speech & Music -->
                 <div class="space-y-16">
                     <div>
                         <h2 class="text-5xl serif text-gray-800 font-light italic mb-12">The Toast</h2>
@@ -294,7 +279,6 @@
                             <textarea id="speech-draft" oninput="saveSpeech()" placeholder="Begin your story here..." class="w-full h-96 text-sm leading-loose outline-none border-none bg-transparent italic" style="border-bottom: none;"></textarea>
                         </div>
                     </div>
-
                     <div>
                         <h2 class="text-5xl serif text-gray-800 font-light italic mb-12">Music Leads</h2>
                         <div class="bg-white p-10 rounded-xl card-shadow border border-gray-50">
@@ -344,7 +328,6 @@
             document.getElementById('content-'+t).classList.remove('hidden');
             const tabBtn = document.getElementById('tab-'+t);
             if(tabBtn) tabBtn.classList.add('active-tab');
-            
             document.getElementById('mobile-nav-overlay').classList.remove('open');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -364,7 +347,6 @@
             });
 
             const totalAllocated = Object.values(averages).reduce((acc, val) => acc + val, 0);
-            
             const pct = (totalAllocated / appData.totalBudget) * 100;
             document.getElementById('dash-budget-bar').style.width = Math.min(100, pct) + "%";
             document.getElementById('dash-budget-rem').innerText = fmt(appData.totalBudget - totalAllocated);
@@ -375,11 +357,10 @@
             bList.innerHTML = "";
             Object.keys(averages).forEach(cat => {
                 bList.insertAdjacentHTML('beforeend', `
-                    <div class="bg-white p-8 rounded-xl border border-gray-50 card-shadow flex justify-between items-center group hover:border-gold/20 transition-all">
-                        <span class="text-[11px] uppercase tracking-widest text-gray-800">${cat}</span>
+                    <div class="bg-white p-6 rounded-xl border border-gray-50 card-shadow flex justify-between items-center group transition-all">
+                        <span class="text-[11px] uppercase tracking-widest text-gray-800 font-medium">${cat}</span>
                         <div class="text-right">
-                            <span class="text-[8px] uppercase text-gray-400 block tracking-[0.2em] mb-1">Estimated</span>
-                            <span class="font-light text-gold text-sm">${fmt(averages[cat])}</span>
+                            <span class="font-medium text-gold text-sm">${fmt(averages[cat])}</span>
                         </div>
                     </div>
                 `);
@@ -389,12 +370,12 @@
             gBody.innerHTML = "";
             appData.guests.forEach((g, i) => {
                 gBody.insertAdjacentHTML('beforeend', `
-                    <tr class="group hover:bg-gray-50/50 transition-colors">
+                    <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="font-medium text-gray-800">${g.name}</td>
-                        <td class="text-gray-400 italic">${g.relation || '-'}</td>
-                        <td><span class="text-[9px] font-bold uppercase tracking-widest ${g.side === 'Bride' ? 'text-gray-400' : g.side === 'Groom' ? 'text-gold' : 'text-gray-300'}">${g.side || 'Bride'}</span></td>
+                        <td class="text-gray-500 italic">${g.relation || '-'}</td>
+                        <td><span class="text-[9px] font-bold uppercase tracking-widest ${g.side === 'Bride' ? 'text-gray-600' : 'text-gold'}">${g.side || 'Bride'}</span></td>
                         <td class="text-gray-400">${g.location || '-'}</td>
-                        <td class="text-right"><button onclick="delGuest(${i})" class="text-red-200 hover:text-red-500 font-light tracking-widest uppercase text-[8px] transition-all">Remove</button></td>
+                        <td class="text-right"><button onclick="delGuest(${i})" class="text-red-200 hover:text-red-500 font-bold uppercase text-[8px] tracking-widest">Remove</button></td>
                     </tr>
                 `);
             });
@@ -406,24 +387,24 @@
                 let html = `
                     <div class="bg-white rounded-xl card-shadow overflow-hidden border border-gray-50">
                         <div class="bg-gray-50/30 px-8 py-5 flex justify-between items-center border-b border-gray-50">
-                            <h3 class="text-sm serif text-gray-800 font-semibold uppercase tracking-[0.2em] italic">${cat}</h3>
-                            <span class="text-[9px] text-gray-400 uppercase tracking-widest">${catVs.length} Leads</span>
+                            <h3 class="text-sm serif text-gray-800 font-semibold uppercase tracking-[0.15em] italic">${cat}</h3>
+                            <span class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">${catVs.length} Leads</span>
                         </div>
                         <div class="table-responsive">
                             <table class="w-full text-left min-w-[600px]">
-                                <thead><tr><th class="w-1/2">Vendor</th><th>Fee</th><th class="text-right">Action</th></tr></thead>
+                                <thead><tr><th class="w-1/2">Partner</th><th>Estimated Fee</th><th class="text-right">Action</th></tr></thead>
                                 <tbody>
                 `;
                 if(catVs.length === 0) {
-                    html += `<tr><td colspan="3" class="text-center py-10 text-gray-300 italic text-[10px]">No partners entered yet.</td></tr>`;
+                    html += `<tr><td colspan="3" class="text-center py-8 text-gray-300 italic text-[10px]">No partners entered yet.</td></tr>`;
                 } else {
                     catVs.forEach(v => {
                         const originalIdx = appData.vendors.indexOf(v);
                         html += `
-                            <tr class="hover:bg-gray-50/50">
+                            <tr>
                                 <td class="font-medium text-gray-700">${v.name}</td>
                                 <td class="font-mono text-gray-500">${fmt(v.price)}</td>
-                                <td class="text-right"><button onclick="delVendor(${originalIdx})" class="text-red-200 hover:text-red-500 font-light uppercase text-[8px] tracking-widest">Delete</button></td>
+                                <td class="text-right"><button onclick="delVendor(${originalIdx})" class="text-red-200 hover:text-red-500 font-bold uppercase text-[8px] tracking-widest">Delete</button></td>
                             </tr>
                         `;
                     });
@@ -434,7 +415,7 @@
 
             const fList = document.getElementById('flow-list');
             fList.innerHTML = appData.flow.sort((a,b) => a.time.localeCompare(b.time)).map((f, i) => `
-                <div class="flex items-center gap-6 bg-white p-5 rounded-lg border border-gray-50 group hover:translate-x-1 transition-all">
+                <div class="flex items-center gap-6 bg-white p-5 rounded-lg border border-gray-50 group transition-all">
                     <b class="text-gold font-light w-20 text-xs tracking-widest">${f.time}</b>
                     <span class="flex-1 text-[11px] uppercase tracking-widest text-gray-700">${f.activity}</span>
                     <button onclick="delFlow(${i})" class="text-red-200 opacity-0 group-hover:opacity-100 transition-opacity">×</button>
@@ -443,7 +424,7 @@
 
             const mList = document.getElementById('music-list');
             mList.innerHTML = appData.music.map((m, i) => `
-                <li class="flex justify-between items-center text-[11px] p-3 bg-gray-50/50 rounded-lg group">
+                <li class="flex justify-between items-center text-[10px] p-3 bg-gray-50/50 rounded-lg group">
                     <span class="font-light tracking-wide text-gray-600 italic">"${m}"</span>
                     <button onclick="delMusic(${i})" class="text-red-200 opacity-0 group-hover:opacity-100 transition-opacity">×</button>
                 </li>
@@ -454,11 +435,8 @@
 
         function saveGuest() {
             const name = document.getElementById('g-name').value;
-            const rel = document.getElementById('g-relation').value;
-            const side = document.getElementById('g-side').value;
-            const loc = document.getElementById('g-location').value;
-            if(!name) return alert("Please enter a guest name.");
-            appData.guests.push({ name, relation: rel, side, location: loc });
+            if(!name) return alert("Enter a name");
+            appData.guests.push({ name, relation: document.getElementById('g-relation').value, side: document.getElementById('g-side').value, location: document.getElementById('g-location').value });
             document.getElementById('g-name').value = "";
             document.getElementById('g-relation').value = "";
             document.getElementById('g-location').value = "";
@@ -467,11 +445,10 @@
         function delGuest(i) { if(confirm("Remove heart?")) { appData.guests.splice(i, 1); save(); } }
 
         function saveVendor() {
-            const cat = document.getElementById('v-category').value;
             const name = document.getElementById('v-name').value;
             const price = document.getElementById('v-price').value;
-            if(!name || !price) return alert("Please enter both partner name and fee.");
-            appData.vendors.push({ category: cat, name, price });
+            if(!name || !price) return alert("Enter details");
+            appData.vendors.push({ category: document.getElementById('v-category').value, name, price });
             document.getElementById('v-name').value = "";
             document.getElementById('v-price').value = "";
             save();
